@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+});
+// ->middleware('auth:sanctum');
 
 Route::get("v1/healthcheck", function(){
     return response()->json(['message' => 'El servidor funciona bien...']);
