@@ -28,7 +28,6 @@ Route::get('v1/data_100', function () {
 
 Route::post('v1/import-table', [PruebaController::class, 'import']);
 
-// Route::get('v1/carga', [PruebasController::class, 'Carga']);
+Route::get('v1/progreso', [PruebaController::class, 'getProgreso']);
 
-// Route::post('/store', [InventoryCrud::class, 'store'])->name('store');
-
+// Route::post('v1/insertData', [PruebaController::class, 'readAndInsert']);

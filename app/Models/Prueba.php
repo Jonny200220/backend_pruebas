@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Prueba extends Model
 {
     // Especifica el nombre de la tabla en la base de datos
-    protected $table = 'pruebas_imam';
 
     // Si tu tabla no tiene las columnas created_at y updated_at
     public $timestamps = false;
 
     // Especifica la clave primaria si no es 'id'
     // protected $primaryKey = 'id_articulos'; // Cambia si el nombre es otro
+    protected $table = 'pruebas_imam';
 
     // Define las columnas que pueden ser asignadas masivamente
     protected $fillable = [
@@ -54,6 +54,4 @@ class Prueba extends Model
         'tipos_resguardo',
         'numero_usuarios',
     ];
-
-    // Puedes definir relaciones aquí, si es necesario
 }
