@@ -6,17 +6,15 @@ use App\Models\Progreso;
 use App\Models\Prueba;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Worksheet\CellIterator;
 
 class PruebaController extends Controller
 {
     public function import(Request $request)
     {
         
-
         // Se lee el archivo y se toma la hoja activa (1ra hoja)
-        // $spreadsheet = IOFactory::load($_FILES[ "archive" ]["tmp_name"]);
-        $spreadsheet = IOFactory::load("C:\imam_enero.xls");
+        $spreadsheet = IOFactory::load($_FILES[ "archive" ]["tmp_name"]);
+        // $spreadsheet = IOFactory::load("C:\imam_enero.xls");
         $worksheet = $spreadsheet->getActiveSheet();
         $countFile = 0;
         
@@ -36,8 +34,6 @@ class PruebaController extends Controller
         $data = [];
         foreach ($worksheet->getRowIterator() as $row) {
             
-
-
             $progreso = Progreso::find(1);
             $progreso -> Avance ++;
             $progreso -> save();
@@ -75,6 +71,83 @@ class PruebaController extends Controller
         unlink($filePath);
     }
 
+    public function readAndInsert(){
+        // Cargando Hoja de excel
+        $spreadsheet = IOFactory::load("C:\imam_enero.xls");
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $textoBuscado = 'Unidad Negocio';
+        $datosFila = null;
+
+        $encontrado = false;
+        $fila = 1;
+        for ($i=1; $i <= 10; $i++) { 
+            if($worksheet->getCell("A{$i}")->getValue()=='Unidad Negocio'){
+                $encontrado = true;
+                $fila = $i;
+                break;
+            }
+        }
+
+        $progreso = Progreso::find(1);
+        $progreso-> Total = $worksheet->getHighestRow();
+        $progreso-> Avance = 0;
+        $progreso-> save();
+
+        if ($encontrado) {
+            for ($i=1; $i <= $worksheet->getHighestRow(); $i++) {
+                $progreso = Progreso::find(1);
+                $progreso -> Avance ++;
+                $progreso -> save();
+                if($fila > $i){
+                    continue;
+                }
+                
+                $prueba = new Prueba;
+                $prueba-> unidad_negocios = $worksheet->getCell("A{$i}")->getValue();
+                $prueba-> id_activos = $worksheet->getCell("B{$i}")->getValue();
+                $prueba-> clases = $worksheet->getCell("C{$i}")->getValue();
+                $prueba-> descripciones =  $worksheet->getCell("D{$i}")->getValue();
+                $prueba-> comple_desc = $worksheet->getCell("E{$i}")->getValue();
+                $prueba-> id_articulos = intval($worksheet->getCell("F{$i}")->getValue());
+                $prueba-> descripciones_articulos = $worksheet->getCell("G{$i}")->getValue();
+                $prueba-> nombres_fabricantes = $worksheet->getCell("H{$i}")->getValue();
+                $prueba-> id_series = $worksheet->getCell("I{$i}")->getValue();
+                $prueba-> modelos = $worksheet->getCell("J{$i}")->getValue();
+                $prueba-> categorias = $worksheet->getCell("K{$i}")->getValue();
+                $prueba-> comentarios_nni = $worksheet->getCell("L{$i}")->getValue();
+                $prueba-> unidades_operaciones = $worksheet->getCell("M{$i}")->getValue();
+                $prueba-> unidades_informacion = $worksheet->getCell("N{$i}")->getValue();
+                $prueba-> descripciones_unidad_info = $worksheet->getCell("O{$i}")->getValue();
+                $prueba-> ui_estados = $worksheet->getCell("P{$i}")->getValue();
+                $prueba-> centros_costo = $worksheet->getCell("Q{$i}")->getValue();
+                $prueba-> descripciones_centros_costo = $worksheet->getCell("R{$i}")->getValue();
+                $prueba-> cc_estados = $worksheet->getCell("S{$i}")->getValue();
+                $prueba-> combinaciones = $worksheet->getCell("T{$i}")->getValue();
+                $prueba-> divisiones = $worksheet->getCell("U{$i}")->getValue();
+                $prueba-> subdivisiones = $worksheet->getCell("V{$i}")->getValue();
+                $prueba-> ubicaciones = $worksheet->getCell("W{$i}")->getValue();
+                $prueba-> sr = $worksheet->getCell("X{$i}")->getValue();
+                $prueba-> numero_actas = $worksheet->getCell("Y{$i}")->getValue();
+                $prueba-> nombres_rcba = $worksheet->getCell("Z{$i}")->getValue();
+                $prueba-> costos = floatval($worksheet->getCell("AA{$i}")->getValue());
+                $prueba-> fechas_adquisicion = date($worksheet->getCell("AB{$i}")->getValue());
+                $prueba-> numeros_alta = $worksheet->getCell("AC{$i}")->getValue();
+                $prueba-> contratos = $worksheet->getCell("AD{$i}")->getValue();
+                $prueba-> fechas_ultimo_movimiento = date($worksheet->getCell("AE{$i}")->getValue());
+                $prueba-> numeros_movimiento = $worksheet->getCell("AF{$i}")->getValue();
+                $prueba-> matriculas = $worksheet->getCell("AG{$i}")->getValue();
+                $prueba-> nombres_usuarios = $worksheet->getCell("AH{$i}")->getValue();
+                $prueba-> tipos_resguardo = $worksheet->getCell("AI{$i}")->getValue();
+                $prueba-> numero_usuarios = intval($worksheet->getCell("AJ{$i}")->getValue());
+                $prueba->save();
+            }
+            return response()->json(['status' => 'success', 'message' => "Dato en la fila {$fila}"], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Texto no encontrado en el archivo'], 401);
+        }
+    }
+
     public function getProgreso()
     {
         $progreso = Progreso::find(1);
@@ -88,61 +161,4 @@ class PruebaController extends Controller
             'avance' => $progreso->Avance
         ], 200);
     }
-
-//     public function readAndInsert($worksheet)
-// {
-//     $rowIterator = $worksheet->getRowIterator();
-//     $startRow = null;
-
-//     // Buscar la fila donde aparece "Unidad negocio"
-//     foreach ($rowIterator as $row) {
-//         if ($row->isEmpty(
-//             CellIterator::TREAT_EMPTY_STRING_AS_EMPTY_CELL | 
-//             CellIterator::TREAT_NULL_VALUE_AS_EMPTY_CELL
-//         )) {
-//             continue; // Ignorar filas vacías
-//         }
-
-//         $cellIterator = $row->getCellIterator();
-//         $cellIterator->setIterateOnlyExistingCells(false);
-
-//         foreach ($cellIterator as $cell) {
-//             if ($cell->getValue() === 'Unidad Negocio') {
-//                 $startRow = $row->getRowIndex(); // Obtener el índice de la fila
-//                 break 2; // Salir de ambos bucles si se encuentra "Unidad negocio"
-//             }
-//         }
-//     }
-
-//     // Verificar si encontramos la fila "Unidad negocio"
-//     if ($startRow === null) {
-//         dd('No se encontró la fila "Unidad Negocio"');
-//     }
-
-//     // Si encontramos la fila "Unidad negocio"
-//     for ($i = $startRow + 1; $i <= $startRow + 10; $i++) {
-//         $row = $worksheet->getRowIterator($i)->current();
-//         $cellIterator = $row->getCellIterator();
-//         $cellIterator->setIterateOnlyExistingCells(false);
-
-//         $prueba = new Prueba();
-//         $count = 0;
-//         foreach ($cellIterator as $cell) {
-//             // Mapear los campos correspondientes de las celdas a los atributos del modelo Prueba
-//             switch ($count) {
-//                 case 0: $prueba->unidad_Negocios = $cell->getValue(); break;
-//                 case 1: $prueba->id_activos = $cell->getValue(); break;
-//                 // Mapear los demás campos según corresponda
-//             }
-//             $count++;
-//         }
-
-//         // Depuración: Mostrar lo que se va a guardar
-//         dd($prueba);  // Puedes comentar esto después de verificar que los datos son correctos
-
-//         // Guardar en la base de datos
-//         $prueba->save();
-//     }
-// }
-
 }

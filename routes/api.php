@@ -28,6 +28,9 @@ Route::get('v1/data_100', function () {
 
 Route::post('v1/import-table', [PruebaController::class, 'import']);
 
+// Ruta para procesar el archivo Excel
+Route::post('v1/insert', [PruebaController::class, 'readAndInsert']);
+
 Route::get('v1/progreso', [PruebaController::class, 'getProgreso']);
 
 // Route::post('v1/insertData', [PruebaController::class, 'readAndInsert']);
