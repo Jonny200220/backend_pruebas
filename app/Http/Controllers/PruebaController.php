@@ -12,20 +12,13 @@ class PruebaController extends Controller
 {
     public function import(Request $request)
     {
-        
+
         // Se lee el archivo y se toma la hoja activa (1ra hoja)
-        $spreadsheet = IOFactory::load($_FILES[ "archive" ]["tmp_name"]);
-        // $spreadsheet = IOFactory::load("C:\imam_enero.xls");
+        // $spreadsheet = IOFactory::load($_FILES[ "archive" ]["tmp_name"]);
+        $spreadsheet = IOFactory::load("C:\IMAM_SEPTIEMBRE2024.xls");
         $worksheet = $spreadsheet->getActiveSheet();
         $countFile = 0;
-        
-        // Iterar sobre las filas y columnas del archivo
-        
-        
-        // Accedemos al campo 
-        // $avance = Progreso::find(1);
-        
-        
+    
         // Total de filas
         $progreso = Progreso::find(1);
         $progreso-> Total = $worksheet->getHighestRow();
@@ -62,9 +55,6 @@ class PruebaController extends Controller
                 break;
             }
         }
-
-        // $this->readAndInsert($worksheet);
-
         // Retornar los datos procesados
         return response()->json(['data' => $data, 'message' => 'Archivo procesado con éxito'], 200);
 
