@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Progreso;
 use App\Models\Prueba;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date as FacadesDate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PruebaController extends Controller
@@ -73,7 +74,7 @@ class PruebaController extends Controller
 
     public function readAndInsert(){
         // Cargando Hoja de excel
-        $spreadsheet = IOFactory::load("C:\imam_enero.xls");
+        $spreadsheet = IOFactory::load("C:\IMAM_FEBRERO2024.xls");
         $worksheet = $spreadsheet->getActiveSheet();
 
         $textoBuscado = 'Unidad Negocio';
@@ -99,10 +100,10 @@ class PruebaController extends Controller
                 $progreso = Progreso::find(1);
                 $progreso -> Avance ++;
                 $progreso -> save();
-                if($fila > $i){
+                if($i <= $fila){
                     continue;
                 }
-                
+ 
                 $prueba = new Prueba;
                 $prueba-> unidad_negocios = $worksheet->getCell("A{$i}")->getValue();
                 $prueba-> id_activos = $worksheet->getCell("B{$i}")->getValue();
@@ -131,10 +132,18 @@ class PruebaController extends Controller
                 $prueba-> numero_actas = $worksheet->getCell("Y{$i}")->getValue();
                 $prueba-> nombres_rcba = $worksheet->getCell("Z{$i}")->getValue();
                 $prueba-> costos = floatval($worksheet->getCell("AA{$i}")->getValue());
-                $prueba-> fechas_adquisicion = date($worksheet->getCell("AB{$i}")->getValue());
+                if($worksheet->getCell("AB{$i}")->getFormattedValue() != null){
+                    $fecha_adq = FacadesDate::createFromFormat('m/d/Y',$worksheet->getCell("AB{$i}")->getFormattedValue());
+                    $formato_adq = $fecha_adq-> format('Y-m-d');
+                    $prueba-> fechas_adquisicion = $formato_adq;
+                }
                 $prueba-> numeros_alta = $worksheet->getCell("AC{$i}")->getValue();
                 $prueba-> contratos = $worksheet->getCell("AD{$i}")->getValue();
-                $prueba-> fechas_ultimo_movimiento = date($worksheet->getCell("AE{$i}")->getValue());
+                if($worksheet->getCell("AE{$i}")->getFormattedValue() != null){
+                    $fecha_ult = FacadesDate::createFromFormat('m/d/Y',$worksheet->getCell("AE{$i}")->getFormattedValue());
+                    $formato_ult = $fecha_ult-> format('Y-m-d');
+                    $prueba-> fechas_ultimo_movimiento = $formato_ult;
+                }
                 $prueba-> numeros_movimiento = $worksheet->getCell("AF{$i}")->getValue();
                 $prueba-> matriculas = $worksheet->getCell("AG{$i}")->getValue();
                 $prueba-> nombres_usuarios = $worksheet->getCell("AH{$i}")->getValue();
@@ -142,7 +151,7 @@ class PruebaController extends Controller
                 $prueba-> numero_usuarios = intval($worksheet->getCell("AJ{$i}")->getValue());
                 $prueba->save();
             }
-            return response()->json(['status' => 'success', 'message' => "Dato en la fila {$fila}"], 200);
+            return response()->json(['status' => 'success', 'message' => "Insercion terminada"], 200);
         } else {
             return response()->json(['status' => 'error', 'message' => 'Texto no encontrado en el archivo'], 401);
         }
