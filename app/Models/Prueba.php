@@ -13,7 +13,7 @@ class Prueba extends Model
 
     // Especifica la clave primaria si no es 'id'
     // protected $primaryKey = 'id_articulos'; // Cambia si el nombre es otro
-    protected $table = 'pruebas_imam';
+    protected $table = 'imam';
 
     // Define las columnas que pueden ser asignadas masivamente
     protected $fillable = [
