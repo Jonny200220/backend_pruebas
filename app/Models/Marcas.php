@@ -13,4 +13,11 @@ class Marcas extends Model
     public $timestamps = true;
     const CREATED_AT = 'REGISTRO_fecha_creacion';
     const UPDATED_AT = 'REGISTRO_fecha_ultimo_cambio';
+
+    // protected $fillable = [
+    //     'id_marca',
+    //     'descripcion_marca',
+    //     'REGISTRO_fecha_ultimo_cambio',
+    //     'REGISTRO_en_uso'
+    // ];
 }
