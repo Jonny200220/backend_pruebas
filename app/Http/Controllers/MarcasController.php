@@ -25,7 +25,7 @@ class MarcasController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Marca creada exitosamente'
-        ], 201); // 201 para creación exitosa
+        ], 201);
     }
 
     public function update(Request $request, Marcas $marca){
