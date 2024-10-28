@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DescripcionesController;
 use App\Http\Controllers\MarcasController;
 use App\Http\Controllers\ModelosController;
 use App\Http\Controllers\PruebaController;
@@ -34,3 +35,9 @@ Route::post('v1/modelos', [ModelosController::class, 'store']);
 // Route::get('v1/marcas/{id}', [MarcasController::class, 'show']); 
 Route::put('v1/modelos/{modelo}', [ModelosController::class, 'update']); 
 Route::delete('v1/modelos/{modelo}', [ModelosController::class, 'destroy']);
+
+Route::get('v1/descripciones', [DescripcionesController::class, 'index']);
+Route::post('v1/descripciones', [DescripcionesController::class, 'store']);
+// Route::get('v1/marcas/{id}', [MarcasController::class, 'show']); 
+Route::put('v1/descripciones/{descripcion}', [DescripcionesController::class, 'update']); 
+Route::delete('v1/descripciones/{descripcion}', [DescripcionesController::class, 'destroy']);
