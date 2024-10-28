@@ -150,11 +150,9 @@ class PruebaController extends Controller
     public function getProgreso()
     {
         $progreso = Progreso::find(1);
-        // Verificar si se encontró el registro
         if (!$progreso) {
             return response()->json(['message' => 'No se encontró el progreso'], 404);
         }
-            
         return response()->json([
             'total' => $progreso->Total,
             'avance' => $progreso->Avance

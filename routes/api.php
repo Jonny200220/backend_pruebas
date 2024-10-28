@@ -23,7 +23,7 @@ Route::get('v1/progreso', [PruebaController::class, 'getProgreso']);
 // Route::resource('v1/marcas', MarcasController::class);
 
 Route::get('v1/marcas', [MarcasController::class, 'index']);
-// Route::post('v1/marcas', [MarcasController::class, 'store']); 
+Route::post('v1/marcas', [MarcasController::class, 'store']);
 // Route::get('v1/marcas/{id}', [MarcasController::class, 'show']); 
-// Route::put('v1/marcas/{id}', [MarcasController::class, 'update']); 
-// Route::delete('v1/marcas/{id}', [MarcasController::class, 'destroy']);
+Route::put('v1/marcas/{marca}', [MarcasController::class, 'update']); 
+Route::delete('v1/marcas/{marca}', [MarcasController::class, 'destroy']);
