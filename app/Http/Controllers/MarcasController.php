@@ -16,7 +16,6 @@ class MarcasController extends Controller
     public function store(Request $request)
     {
         $marca = new Marcas();
-        $marca ->id_marca = $request ->input('id_marca');
         $marca->descripcion_marca = $request->input('descripcion_marca');
         $marca->REGISTRO_fecha_creacion = now();
         $marca->REGISTRO_fecha_ultimo_cambio = now();

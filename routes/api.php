@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MarcasController;
+use App\Http\Controllers\ModelosController;
 use App\Http\Controllers\PruebaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,3 +28,9 @@ Route::post('v1/marcas', [MarcasController::class, 'store']);
 // Route::get('v1/marcas/{id}', [MarcasController::class, 'show']); 
 Route::put('v1/marcas/{marca}', [MarcasController::class, 'update']); 
 Route::delete('v1/marcas/{marca}', [MarcasController::class, 'destroy']);
+
+Route::get('v1/modelos', [ModelosController::class, 'index']);
+Route::post('v1/modelos', [ModelosController::class, 'store']);
+// Route::get('v1/marcas/{id}', [MarcasController::class, 'show']); 
+Route::put('v1/modelos/{modelo}', [ModelosController::class, 'update']); 
+Route::delete('v1/modelos/{modelo}', [ModelosController::class, 'destroy']);
