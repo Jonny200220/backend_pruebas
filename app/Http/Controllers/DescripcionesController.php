@@ -20,7 +20,7 @@ class DescripcionesController extends Controller
         $marca->descripcion = $request->input('descripcion');
         $marca->REGISTRO_fecha_creacion = now();
         $marca->REGISTRO_fecha_ultimo_cambio = now();
-        $marca->REGISTRO_en_uso = $request->input('REGISTRO_en_uso');
+        $marca->REGISTRO_en_uso = $request->input('idDescripcion');
         $marca->save();
 
         return response()->json([
@@ -34,7 +34,7 @@ class DescripcionesController extends Controller
         $descripcion->update([
             'descripcion' => $request->input('descripcion'),
             'REGISTRO_fecha_ultimo_cambio' => now(),
-            'REGISTRO_en_uso' => $request->input('REGISTRO_en_uso')
+            'REGISTRO_en_uso' => $request->input('idDescripcion')
         ]);
         return response()->json([
             'status' => true,

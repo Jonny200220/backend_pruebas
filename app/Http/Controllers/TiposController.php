@@ -16,10 +16,10 @@ class TiposController extends Controller
     public function store(Request $request)
     {
         $marca = new Tipos();
-        $marca->descripcion_tipo = $request->input('descripcion_tipo');
+        $marca->descripcion_tipo = $request->input('tipo');
         $marca->REGISTRO_fecha_creacion = now();
         $marca->REGISTRO_fecha_ultimo_cambio = now();
-        $marca->REGISTRO_en_uso = $request->input('REGISTRO_en_uso');
+        $marca->REGISTRO_en_uso = $request->input('idTipo');
         $marca->save();
 
         return response()->json([
@@ -31,9 +31,9 @@ class TiposController extends Controller
     public function update(Request $request, Tipos $tipo){
 
         $tipo->update([
-            'descripcion_tipo' => $request->input('descripcion_tipo'),
+            'descripcion_tipo' => $request->input('tipo'),
             'REGISTRO_fecha_ultimo_cambio' => now(),
-            'REGISTRO_en_uso' => $request->input('REGISTRO_en_uso')
+            'REGISTRO_en_uso' => $request->input('idTipo')
         ]);
         return response()->json([
             'status' => true,

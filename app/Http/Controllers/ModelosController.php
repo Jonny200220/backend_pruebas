@@ -17,10 +17,10 @@ class ModelosController extends Controller
     public function store(Request $request)
     {
         $modelo = new Modelos();
-        $modelo->descripcion_modelo = $request->input('descripcion_modelo');
+        $modelo->descripcion_modelo = $request->input('modelo');
         $modelo->REGISTRO_fecha_creacion = now();
         $modelo->REGISTRO_fecha_ultimo_cambio = now();
-        $modelo->REGISTRO_en_uso = $request->input('REGISTRO_en_uso');
+        $modelo->REGISTRO_en_uso = $request->input('idModelo');
         $modelo->save();
 
         return response()->json([
@@ -32,9 +32,9 @@ class ModelosController extends Controller
     public function update(Request $request, Modelos $modelo){
 
         $modelo->update([
-            'descripcion_modelo' => $request->input('descripcion_modelo', $modelo->descripcion_modelo),
+            'descripcion_modelo' => $request->input('modelo', $modelo->descripcion_modelo),
             'REGISTRO_fecha_ultimo_cambio' => now(),
-            'REGISTRO_en_uso' => $request->input('REGISTRO_en_uso', $modelo->REGISTRO_en_uso),
+            'REGISTRO_en_uso' => $request->input('idModelo', $modelo->REGISTRO_en_uso),
         ]);
         return response()->json([
             'status' => true,
